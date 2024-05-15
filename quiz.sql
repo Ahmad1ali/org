@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 15 mei 2024 om 08:40
+-- Gegenereerd op: 15 mei 2024 om 15:08
 -- Serverversie: 10.4.32-MariaDB
 -- PHP-versie: 8.2.12
 
@@ -41,7 +41,8 @@ CREATE TABLE `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20240418132140', '2024-04-18 15:21:49', 75);
+('DoctrineMigrations\\Version20240418132140', '2024-05-15 10:01:06', 85),
+('DoctrineMigrations\\Version20240515120840', '2024-05-15 14:08:46', 121);
 
 -- --------------------------------------------------------
 
@@ -63,6 +64,54 @@ CREATE TABLE `messenger_messages` (
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `desciption` varchar(255) NOT NULL,
+  `purchase_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `product`
+--
+
+INSERT INTO `product` (`id`, `name`, `image`, `desciption`, `purchase_id`) VALUES
+(1, 'Pen', '', 'dsif hiofshd fisdhfshodf f', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `purchase`
+--
+
+DROP TABLE IF EXISTS `purchase`;
+CREATE TABLE `purchase` (
+  `id` int(11) NOT NULL,
+  `purchase_line_id` int(11) DEFAULT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `purchase_line`
+--
+
+DROP TABLE IF EXISTS `purchase_line`;
+CREATE TABLE `purchase_line` (
+  `id` int(11) NOT NULL,
+  `date_created` date NOT NULL,
+  `date_update` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `story`
 --
 
@@ -74,17 +123,6 @@ CREATE TABLE `story` (
   `description` varchar(255) NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Gegevens worden geëxporteerd voor tabel `story`
---
-
-INSERT INTO `story` (`id`, `user_id`, `title`, `description`, `date`) VALUES
-(3, 4, 'Symfony', 'learen van symfony', '2023-02-06'),
-(4, 4, 'Symfony 2', 'kszlkdgkdjzdgjkdzdgdkjg', '2023-06-14'),
-(6, 3, 'ChatGPT', '1wwkkwk', '0000-00-00'),
-(7, 7, 'the king', 'king', '2020-04-03'),
-(12, 7, '111', 'hhhh', '2024-04-11');
 
 -- --------------------------------------------------------
 
@@ -101,17 +139,6 @@ CREATE TABLE `user` (
   `fname` varchar(255) NOT NULL,
   `master` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Gegevens worden geëxporteerd voor tabel `user`
---
-
-INSERT INTO `user` (`id`, `email`, `roles`, `password`, `fname`, `master`) VALUES
-(1, 'emma@gmail.com', '[\"ROLE_ADMIN\"]', '$2y$13$hd.Fg2m7g8YX7UuwM3rhbu7U5TYDBJ0YmavSzEdy2CVV.iKlVpp46', 'Emma', NULL),
-(2, 'mark@gmail.com', '[\"ROLE_MEMBER\"]', '$2y$13$hd.Fg2m7g8YX7UuwM3rhbu7U5TYDBJ0YmavSzEdy2CVV.iKlVpp46', 'Mark', 'Symfony'),
-(3, 'lisa@gmail.com', '[\"ROLE_MEMBER\"]', '$2y$13$hd.Fg2m7g8YX7UuwM3rhbu7U5TYDBJ0YmavSzEdy2CVV.iKlVpp46', 'Lisa', 'front-end'),
-(4, 'alex@gmail.com', '[\"ROLE_MEMBER\"]', '$2y$13$hd.Fg2m7g8YX7UuwM3rhbu7U5TYDBJ0YmavSzEdy2CVV.iKlVpp46', 'Alex', 'crud'),
-(7, 'ahmad@nl', '[\"ROLE_MEMBER\"]', '$2y$13$mB7X8o13lDCfuWM.iAns/ufUy8wIHwP//tOQ9cNV9TxbgGqbRQfwS', 'ahmad', 'Software eingeneer');
 
 --
 -- Indexen voor geëxporteerde tabellen
@@ -131,6 +158,26 @@ ALTER TABLE `messenger_messages`
   ADD KEY `IDX_75EA56E0FB7336F0` (`queue_name`),
   ADD KEY `IDX_75EA56E0E3BD61CE` (`available_at`),
   ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
+
+--
+-- Indexen voor tabel `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_D34A04AD558FBEB9` (`purchase_id`);
+
+--
+-- Indexen voor tabel `purchase`
+--
+ALTER TABLE `purchase`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_6117D13B56A1BF3B` (`purchase_line_id`);
+
+--
+-- Indexen voor tabel `purchase_line`
+--
+ALTER TABLE `purchase_line`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexen voor tabel `story`
@@ -157,20 +204,50 @@ ALTER TABLE `messenger_messages`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT voor een tabel `product`
+--
+ALTER TABLE `product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT voor een tabel `purchase`
+--
+ALTER TABLE `purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT voor een tabel `purchase_line`
+--
+ALTER TABLE `purchase_line`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT voor een tabel `story`
 --
 ALTER TABLE `story`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT voor een tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
 --
+
+--
+-- Beperkingen voor tabel `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `FK_D34A04AD558FBEB9` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`);
+
+--
+-- Beperkingen voor tabel `purchase`
+--
+ALTER TABLE `purchase`
+  ADD CONSTRAINT `FK_6117D13B56A1BF3B` FOREIGN KEY (`purchase_line_id`) REFERENCES `purchase_line` (`id`);
 
 --
 -- Beperkingen voor tabel `story`
