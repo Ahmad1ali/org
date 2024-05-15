@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <table class="table">
+     <thead>
+     <th>title</th>
+     <th>beschrijving</th>
+     <th>datum</th>
+     <th>wie</th>
+    </thead>
+    {% for storys in storys %}
+        <tbody>
+        <td>{{ storys.title }}</td>
+        <td>{{ storys.description }}</td>
+        <td> {{ storys.date|date("m/d/Y") }}</td>
+        <td>{{ storys.user.fname }}</td>
+        {#          <td><a href="{{ path ('app_delete',{id: Autos.id})}}" class="btn btn-dark">delet</a> </td>#}
+{#        <td>#}
+        <td><a href="{{ path ('app_delete',{id:storys.id})}}" class="btn btn-danger">delete</a></td>
+{#            <a href="{{ path ('app-update',{id: employee.id})}}" class="btn btn-danger">update</a>#}
+
+{#        </td>#}
+        </tbody>
+
+    {% endfor %}
+
+    </table>
+
+<a href="{{ path ('app_logout') }}">logout</a>
+{#{{ admin }}#}
+{% endblock %}
