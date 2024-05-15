@@ -22,9 +22,6 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $desciption = null;
 
-    #[ORM\ManyToOne(inversedBy: 'prodcut')]
-    private ?Purchase $purchase = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -62,18 +59,6 @@ class Product
     public function setDesciption(string $desciption): static
     {
         $this->desciption = $desciption;
-
-        return $this;
-    }
-
-    public function getPurchase(): ?Purchase
-    {
-        return $this->purchase;
-    }
-
-    public function setPurchase(?Purchase $purchase): static
-    {
-        $this->purchase = $purchase;
 
         return $this;
     }
